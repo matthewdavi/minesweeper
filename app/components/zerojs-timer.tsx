@@ -4,8 +4,8 @@ import { useEvent } from "../useEvent";
 import { useSearch, useLoaderData } from "@tanstack/react-router";
 
 export function TimerWrapper() {
-  const { state, timeElapsed } = useLoaderData({ from: "/nojs/" });
-  const { isGameOver, isGameWon, grid } = useSearch({ from: "/nojs/" });
+  const { state, timeElapsed } = useLoaderData({ from: "/" });
+  const { isGameOver, isGameWon, grid } = useSearch({ from: "/" });
   const [elapsed, setElapsed] = useState(timeElapsed);
 
   const timerFunction = useEvent(() => {

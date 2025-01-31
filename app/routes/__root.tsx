@@ -1,12 +1,8 @@
 // app/routes/__root.tsx
-import {
-  Outlet,
-  ScrollRestoration,
-  createRootRoute,
-} from "@tanstack/react-router";
+import { Outlet, createRootRoute } from "@tanstack/react-router";
 import { Meta, Scripts } from "@tanstack/start";
 import type { ReactNode } from "react";
-import appCss from "../main.css?inline";
+import cssUrl from "../main.css?url";
 
 export const Route = createRootRoute({
   head: () => ({
@@ -24,6 +20,7 @@ export const Route = createRootRoute({
     ],
   }),
   component: RootComponent,
+  notFoundComponent: () => <div>404</div>,
 });
 
 function RootComponent() {
@@ -39,11 +36,10 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
     <html>
       <head>
         <Meta />
-        <style dangerouslySetInnerHTML={{ __html: appCss }} />
+        <link rel="stylesheet" href={cssUrl} />
       </head>
       <body>
         {children}
-        <ScrollRestoration />
         <Scripts />
       </body>
     </html>

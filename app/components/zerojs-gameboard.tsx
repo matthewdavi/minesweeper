@@ -5,11 +5,11 @@ import {
   recursivelyRevealAdjacentCellsWithValueZero,
 } from "./minesweeper-context";
 import { useSearch } from "@tanstack/react-router";
-import { Route } from "../routes/nojs";
+import { Route } from "../routes";
 import { TimerWrapper } from "./zerojs-timer";
-
+import { useIsClient } from "./use-is-client";
 export function GameBoard() {
-  const state = useSearch({ from: "/nojs/" });
+  const state = useSearch({ from: "/" });
   const grid = state.grid;
   const numberOfBombs = grid
     .flat()
@@ -20,7 +20,7 @@ export function GameBoard() {
   const numberOfBombsRemaining = numberOfBombs - numberOfFlaggedCells;
 
   const navigate = useNavigate();
-
+  const isClient = useIsClient();
   const getNextState = (
     rowIndex: number,
     cellIndex: number,
@@ -32,7 +32,7 @@ export function GameBoard() {
       .flat()
       .every((cell) => cell.state === "INITIAL");
     let startTime = state.startTime;
-    if (isFirstMove) {
+    if (isFirstMove && isClient) {
       startTime = Date.now();
     }
     if (isFlagging) {
@@ -98,44 +98,66 @@ export function GameBoard() {
           </div>
 
           {/* Mode toggle */}
-          <noscript>
-            <div className="flex items-center justify-center gap-4 mt-3">
-              <h3 className="bg-[#c0c0c0] text-black px-2 py-1 text-sm font-['MS_Sans_Serif'] [border:2px_inset_#808080]">
-                MODE SELECT:
-              </h3>
-              <div className="flex items-center gap-2">
-                <span
-                  className={`text-sm font-['MS_Sans_Serif'] ${!state.isFlaggingMode ? "text-[#808080]" : "text-black"}`}
+          <div className="flex items-center justify-center gap-4 mt-3">
+            <h3 className="bg-[#c0c0c0] text-black px-2 py-1 text-sm font-['MS_Sans_Serif'] [border:2px_inset_#808080]">
+              MODE SELECT:
+            </h3>
+            <div className="flex flex-col">
+              <Link
+                to={Route.to}
+                search={{
+                  ...state,
+                  isFlaggingMode: true,
+                }}
+                className={`flex items-center gap-3 px-2 py-1 ${
+                  state.isGameOver || state.isGameWon
+                    ? "opacity-50 cursor-not-allowed"
+                    : "cursor-pointer"
+                }`}
+                disabled={state.isGameOver || state.isGameWon}
+              >
+                <div
+                  className={`w-4 h-4 bg-white [border:2px_inset_#808080] flex items-center justify-center ${
+                    state.isFlaggingMode ? "bg-[#c0c0c0]" : ""
+                  }`}
                 >
-                  Flag
-                </span>
-                <div className="bg-[#c0c0c0] [border:2px_outset_#dfdfdf] p-0.5">
-                  <Link
-                    to={Route.to}
-                    search={stateWithFlaggingToggled}
-                    className={`relative h-7 w-14 bg-[#c0c0c0] [border:2px_inset_#808080] ${
-                      state.isGameOver || state.isGameWon
-                        ? "opacity-50 cursor-not-allowed"
-                        : ""
-                    }`}
-                    disabled={state.isGameOver || state.isGameWon}
-                  >
-                    <span className="sr-only">Toggle flagging mode</span>
-                    <span
-                      className={`absolute top-0.5 h-5 w-5 bg-[#c0c0c0] [border:2px_outset_#dfdfdf] ${
-                        !state.isFlaggingMode ? "right-1" : "left-1"
-                      }`}
-                    />
-                  </Link>
+                  {state.isFlaggingMode && (
+                    <span className="text-black text-xs">✓</span>
+                  )}
                 </div>
-                <span
-                  className={`text-sm font-['MS_Sans_Serif'] ${state.isFlaggingMode ? "text-[#808080]" : "text-black"}`}
-                >
-                  Reveal
+                <span className="text-sm font-['MS_Sans_Serif']">
+                  Flag Mode
                 </span>
-              </div>
+              </Link>
+
+              <Link
+                to={Route.to}
+                search={{
+                  ...state,
+                  isFlaggingMode: false,
+                }}
+                className={`flex items-center gap-2 px-2 py-1 ${
+                  state.isGameOver || state.isGameWon
+                    ? "opacity-50 cursor-not-allowed"
+                    : "cursor-pointer"
+                }`}
+                disabled={state.isGameOver || state.isGameWon}
+              >
+                <div
+                  className={`w-4 h-4 bg-white [border:2px_inset_#808080] flex items-center justify-center ${
+                    !state.isFlaggingMode ? "bg-[#c0c0c0]" : ""
+                  }`}
+                >
+                  {!state.isFlaggingMode && (
+                    <span className="text-black text-xs">✓</span>
+                  )}
+                </div>
+                <span className="text-sm font-['MS_Sans_Serif']">
+                  Reveal Mode
+                </span>
+              </Link>
             </div>
-          </noscript>
+          </div>
         </div>
       </div>
       <div className="flex flex-col items-center justify-center w-full">
@@ -148,13 +170,20 @@ export function GameBoard() {
       </div>
 
       {/* Game grid */}
-      <div className="bg-[#c0c0c0] p-4 [border:2px_inset_#808080]">
-        <div className="bg-[#808080] [border:2px_inset_#c0c0c0] p-1">
+      <div className="[border:2px_inset_#808080] w-full p-4">
+        <div
+          className="bg-[#808080] [border:2px_inset_#c0c0c0] p-2 flex flex-col gap-px mx-auto"
+          style={{ width: `${state.gridSize * 32}px` }}
+        >
           {grid.map((row, rowIndex) => (
-            <div className="flex justify-center" key={rowIndex}>
+            <div
+              key={rowIndex}
+              className="flex flex-row"
+              style={{ height: "32px" }}
+            >
               {row.map((cell, cellIndex) => (
                 <Link
-                  key={cellIndex}
+                  key={`${rowIndex}-${cellIndex}`}
                   to={Route.to}
                   search={getNextState(
                     rowIndex,
@@ -195,19 +224,19 @@ export function GameBoard() {
                     cell.state === "OPENED"
                   }
                   className={`
-                    w-8 h-8 flex justify-center items-center
-                    font-['MS_Sans_Serif']
+                    w-8 h-8 flex-shrink-0 flex-grow-0
+                    flex justify-center items-center
+                    font-['MS_Sans_Serif'] text-[min(2vw,1.125rem)]
                     ${
                       cell.state === "OPENED"
                         ? "bg-[#c0c0c0] [border:1px_inset_#808080]"
                         : "bg-[#c0c0c0] [border:2px_outset_#808080] hover:brightness-105"
                     }
                     ${state.isGameOver || state.isGameWon || cell.state === "OPENED" ? "cursor-default" : "cursor-pointer"}
-                    text-lg
                   `}
                 >
                   {cell.state === "OPENED" && <OpenCell value={cell.value} />}
-                  {cell.state === "FLAGGED" && "🚩"}
+                  {cell.state === "FLAGGED" && ""}
                 </Link>
               ))}
             </div>
@@ -215,7 +244,7 @@ export function GameBoard() {
         </div>
 
         {/* Game controls */}
-        <div className="flex flex-col items-center gap-2 mt-4">
+        <div className="flex flex-col items-center gap-2">
           <form
             action={Route.to}
             method="get"
@@ -226,7 +255,7 @@ export function GameBoard() {
               const gridSize = formData.get("gridSize");
               if (gridSize) {
                 navigate({
-                  to: "/nojs",
+                  to: "/",
                   search: {
                     gridSize: Number(gridSize),
                     isGameOver: false,
@@ -245,7 +274,6 @@ export function GameBoard() {
             <input type="hidden" name="isGameOver" value="false" />
             <input type="hidden" name="isGameWon" value="false" />
             <input type="hidden" name="isFlaggingMode" value="false" />
-            <input type="hidden" name="startTime" value={Date.now()} />
             <button
               type="submit"
               className="px-6 py-2 bg-[#c0c0c0] [border:2px_outset_#808080] hover:brightness-105 active:[border:2px_inset_#808080] cursor-pointer font-['MS_Sans_Serif']"

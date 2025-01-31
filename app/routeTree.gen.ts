@@ -12,9 +12,7 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as MinesweeperImport } from './routes/minesweeper'
-import { Route as AboutImport } from './routes/about'
 import { Route as IndexImport } from './routes/index'
-import { Route as NojsIndexImport } from './routes/nojs/index'
 
 // Create/Update Routes
 
@@ -24,21 +22,9 @@ const MinesweeperRoute = MinesweeperImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const AboutRoute = AboutImport.update({
-  id: '/about',
-  path: '/about',
-  getParentRoute: () => rootRoute,
-} as any)
-
 const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const NojsIndexRoute = NojsIndexImport.update({
-  id: '/nojs/',
-  path: '/nojs/',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -53,25 +39,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
-    '/about': {
-      id: '/about'
-      path: '/about'
-      fullPath: '/about'
-      preLoaderRoute: typeof AboutImport
-      parentRoute: typeof rootRoute
-    }
     '/minesweeper': {
       id: '/minesweeper'
       path: '/minesweeper'
       fullPath: '/minesweeper'
       preLoaderRoute: typeof MinesweeperImport
-      parentRoute: typeof rootRoute
-    }
-    '/nojs/': {
-      id: '/nojs/'
-      path: '/nojs'
-      fullPath: '/nojs'
-      preLoaderRoute: typeof NojsIndexImport
       parentRoute: typeof rootRoute
     }
   }
@@ -81,47 +53,37 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/about': typeof AboutRoute
   '/minesweeper': typeof MinesweeperRoute
-  '/nojs': typeof NojsIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/about': typeof AboutRoute
   '/minesweeper': typeof MinesweeperRoute
-  '/nojs': typeof NojsIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
-  '/about': typeof AboutRoute
   '/minesweeper': typeof MinesweeperRoute
-  '/nojs/': typeof NojsIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/minesweeper' | '/nojs'
+  fullPaths: '/' | '/minesweeper'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/minesweeper' | '/nojs'
-  id: '__root__' | '/' | '/about' | '/minesweeper' | '/nojs/'
+  to: '/' | '/minesweeper'
+  id: '__root__' | '/' | '/minesweeper'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AboutRoute: typeof AboutRoute
   MinesweeperRoute: typeof MinesweeperRoute
-  NojsIndexRoute: typeof NojsIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AboutRoute: AboutRoute,
   MinesweeperRoute: MinesweeperRoute,
-  NojsIndexRoute: NojsIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -135,22 +97,14 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/about",
-        "/minesweeper",
-        "/nojs/"
+        "/minesweeper"
       ]
     },
     "/": {
       "filePath": "index.tsx"
     },
-    "/about": {
-      "filePath": "about.tsx"
-    },
     "/minesweeper": {
       "filePath": "minesweeper.tsx"
-    },
-    "/nojs/": {
-      "filePath": "nojs/index.tsx"
     }
   }
 }
