@@ -1,0 +1,33 @@
+{
+  "name": "router-test",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "dev": "vinxi dev --port=3001",
+    "build": "vinxi build",
+    "serve": "vinxi serve",
+    "start": "vinxi start"
+  },
+  "devDependencies": {
+    "@tanstack/router-plugin": "^1.97.24",
+    "@types/react": "^19.0.8",
+    "@types/react-dom": "^19.0.3",
+    "@vitejs/plugin-react": "^4.3.4",
+    "vite": "^6.0.3",
+    "vite-tsconfig-paths": "^5.1.4"
+  },
+  "dependencies": {
+    "@tailwindcss/vite": "^4.0.0",
+    "@tanstack/react-router": "^1.98.0",
+    "@tanstack/router-devtools": "^1.97.24",
+    "@tanstack/start": "^1.98.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "tailwindcss": "^4.0.0",
+    "unenv": "^1.10.0",
+    "vinxi": "^0.5.1",
+    "zod": "^3.24.1"
+  }
+}
