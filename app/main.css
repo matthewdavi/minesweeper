@@ -1,6 +1,8 @@
 @import "tailwindcss";
 @source "components/zerojs-gameboard.tsx";
 @source "components/zerojs-timer.tsx";
+@source "routes/";
+@source "components/";
 
 .background-animate {
   background-size: 400%;

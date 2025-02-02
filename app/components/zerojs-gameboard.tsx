@@ -123,7 +123,7 @@ export function GameBoard() {
               {row.map((cell, cellIndex) => {
                 // Base styling for all cells.
                 const baseClasses =
-                  "w-8 h-8 flex-shrink-0 flex-grow-0 flex justify-center items-center font-['MS_Sans_Serif'] text-[min(2vw,1.125rem)]";
+                  "w-8 h-8 flex-shrink-0 flex-grow-0 flex justify-center items-center font-['MS_Sans_Serif'] text-[min(2vw,1.125rem)] [-webkit-touch-callout:none]";
                 // For Windows 95 look:
                 // Unopened cell: raised border (light top and left, dark bottom and right).
                 // Opened cell: inset border (dark top/left, light bottom/right).
