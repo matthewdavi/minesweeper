@@ -164,75 +164,77 @@ export function GameBoard() {
       </div>
 
       {/* Game grid */}
-      <div className="[border:2px_inset_#808080] w-full p-4">
+      <div className={"w-full p-4 [border:2px_inset_#808080]"}>
         <div
-          className="bg-[#808080] [border:2px_inset_#c0c0c0] p-2 flex flex-col gap-px mx-auto"
+          className={"mx-auto flex flex-col gap-px p-2 bg-[#c0c0c0]"}
           style={{ width: `${state.gridSize * 32}px` }}
         >
           {grid.map((row, rowIndex) => (
             <div
               key={rowIndex}
-              className="flex flex-row"
+              className={"flex flex-row"}
               style={{ height: "32px" }}
             >
-              {row.map((cell, cellIndex) => (
-                <Link
-                  key={`${rowIndex}-${cellIndex}`}
-                  to={Route.to}
-                  search={getNextState(
-                    rowIndex,
-                    cellIndex,
-                    state.isFlaggingMode
-                  )}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    if (state.isGameOver || state.isGameWon) {
-                      return;
-                    }
-                    navigate({
-                      to: Route.to,
-                      search: {
-                        ...getNextState(rowIndex, cellIndex, false),
-                        isFlaggingMode: state.isFlaggingMode,
-                      },
-                    });
-                  }}
-                  onContextMenu={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    if (state.isGameOver || state.isGameWon) {
-                      return;
-                    }
-                    navigate({
-                      to: Route.to,
-                      search: {
-                        ...getNextState(rowIndex, cellIndex, true),
-                        isFlaggingMode: state.isFlaggingMode,
-                      },
-                    });
-                  }}
-                  disabled={
-                    state.isGameOver ||
-                    state.isGameWon ||
-                    cell.state === "OPENED"
-                  }
-                  className={`
-                    w-8 h-8 flex-shrink-0 flex-grow-0
-                    flex justify-center items-center
-                    font-['MS_Sans_Serif'] text-[min(2vw,1.125rem)]
-                    ${
+              {row.map((cell, cellIndex) => {
+                // Base styling for all cells.
+                const baseClasses =
+                  "w-8 h-8 flex-shrink-0 flex-grow-0 flex justify-center items-center font-['MS_Sans_Serif'] text-[min(2vw,1.125rem)]";
+                // For Windows 95 look:
+                // Unopened cell: raised border (light top and left, dark bottom and right).
+                // Opened cell: inset border (dark top/left, light bottom/right).
+                const cellClasses =
+                  cell.state === "OPENED"
+                    ? "bg-[#c0c0c0] border-2 border-t-[#404040] border-l-[#404040] border-r-white border-b-white cursor-default"
+                    : "bg-[#c0c0c0] border-2 border-t-white border-l-white border-r-[#404040] border-b-[#404040] hover:bg-gray-200 cursor-pointer";
+                return (
+                  <Link
+                    key={`${rowIndex}-${cellIndex}`}
+                    to={Route.to}
+                    search={getNextState(
+                      rowIndex,
+                      cellIndex,
+                      state.isFlaggingMode
+                    )}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      if (state.isGameOver || state.isGameWon) {
+                        return;
+                      }
+                      navigate({
+                        to: Route.to,
+                        search: {
+                          ...getNextState(rowIndex, cellIndex, false),
+                          isFlaggingMode: state.isFlaggingMode,
+                        },
+                      });
+                    }}
+                    onContextMenu={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      if (state.isGameOver || state.isGameWon) {
+                        return;
+                      }
+                      navigate({
+                        to: Route.to,
+                        search: {
+                          ...getNextState(rowIndex, cellIndex, true),
+                          isFlaggingMode: state.isFlaggingMode,
+                        },
+                      });
+                    }}
+                    disabled={
+                      state.isGameOver ||
+                      state.isGameWon ||
                       cell.state === "OPENED"
-                        ? "bg-[#c0c0c0] [border:1px_inset_#808080]"
-                        : "bg-[#c0c0c0] [border:2px_outset_#808080] hover:brightness-105"
                     }
-                    ${state.isGameOver || state.isGameWon || cell.state === "OPENED" ? "cursor-default" : "cursor-pointer"}
-                  `}
-                >
-                  {cell.state === "OPENED" && <OpenCell value={cell.value} />}
-                  {cell.state === "FLAGGED" && ""}
-                </Link>
-              ))}
+                    className={baseClasses + " " + cellClasses}
+                  >
+                    {cell.state === "OPENED" && <OpenCell value={cell.value} />}
+                    {cell.state === "FLAGGED" && "🚩"}
+                  </Link>
+                );
+              })}
             </div>
           ))}
         </div>
