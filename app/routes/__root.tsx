@@ -15,7 +15,7 @@ export const Route = createRootRoute({
         content: "width=device-width, initial-scale=1",
       },
       {
-        title: "Progressive Enhanced Minesweeper",
+        title: "Progressively Enhanced Minesweeper",
       },
     ],
   }),
