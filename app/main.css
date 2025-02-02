@@ -1,20 +1,21 @@
 @import "tailwindcss";
+@source "components/zerojs-gameboard.tsx";
+@source "components/zerojs-timer.tsx";
 
 .background-animate {
-    background-size: 400%;
-    -webkit-animation: gradient 15s ease infinite;
-    -moz-animation: gradient 15s ease infinite;
-    animation: gradient 15s ease infinite;
+  background-size: 400%;
+  -webkit-animation: gradient 15s ease infinite;
+  -moz-animation: gradient 15s ease infinite;
+  animation: gradient 15s ease infinite;
 }
 
 @keyframes gradient {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
 
-    0%,
-    100% {
-        background-position: 0% 50%;
-    }
-
-    50% {
-        background-position: 100% 50%;
-    }
+  50% {
+    background-position: 100% 50%;
+  }
 }
