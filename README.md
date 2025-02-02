@@ -28,4 +28,5 @@ This implementation takes advantage of TanStack Router's powerful search paramet
 ## Development
 
 1. Clone the repository
-2. Install dependencies:
+2. `bun install`
+3. `bun run dev`
