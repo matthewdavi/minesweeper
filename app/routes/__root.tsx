@@ -2,7 +2,7 @@
 import { Outlet, createRootRoute } from "@tanstack/react-router";
 import { Meta, Scripts } from "@tanstack/start";
 import type { ReactNode } from "react";
-import cssUrl from "../main.css?url";
+import cssInline from "../main.css?inline";
 
 export const Route = createRootRoute({
   head: () => ({
@@ -37,7 +37,7 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
     <html>
       <head>
         <Meta />
-        <link rel="stylesheet" href={cssUrl} />
+        <style dangerouslySetInnerHTML={{ __html: cssInline }} />
       </head>
       <body>
         {children}
