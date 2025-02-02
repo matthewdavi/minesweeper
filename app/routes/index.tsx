@@ -79,7 +79,8 @@ export const Route = createFileRoute("/")({
         },
       });
     }
-    if (!ctx.search.grid && ctx.search.gridSize) {
+    const noGrid = !ctx.search.grid || ctx.search.grid.length === 0;
+    if (noGrid && ctx.search.gridSize) {
       const gridSize = ctx.search.gridSize;
       const grid = createGrid(gridSize);
 
@@ -146,7 +147,7 @@ function RouteComponent() {
                 isGameWon: false,
                 isFlaggingMode: false,
                 gridSize: 9,
-                grid: createGrid(9),
+                grid: createGrid(0),
               }}
               className="bg-[#c0c0c0] text-black px-2 border border-[#ffffff] hover:bg-[#d4d4d4] text-xs leading-3"
             >

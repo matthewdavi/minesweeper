@@ -20,7 +20,7 @@ export function GameBoard() {
   const numberOfBombsRemaining = numberOfBombs - numberOfFlaggedCells;
 
   const navigate = useNavigate();
-  const isClient = useIsClient();
+
   const getNextState = (
     rowIndex: number,
     cellIndex: number,
@@ -28,13 +28,9 @@ export function GameBoard() {
   ) => {
     const newGrid = deepCloneGrid(grid);
     const cell = newGrid[rowIndex][cellIndex];
-    const isFirstMove = newGrid
-      .flat()
-      .every((cell) => cell.state === "INITIAL");
+
     let startTime = state.startTime;
-    if (isFirstMove && isClient) {
-      startTime = Date.now();
-    }
+
     if (isFlagging) {
       cell.state = cell.state === "FLAGGED" ? "INITIAL" : "FLAGGED";
     } else if (cell.state === "INITIAL") {
@@ -69,10 +65,6 @@ export function GameBoard() {
       gridSize: state.gridSize,
     };
   };
-  const stateWithFlaggingToggled = {
-    ...state,
-    isFlaggingMode: !state.isFlaggingMode,
-  };
 
   return (
     <div className="max-w-md mx-auto p-4 bg-[#c0c0c0] [border:2px_outset_#c0c0c0]">
@@ -98,66 +90,68 @@ export function GameBoard() {
           </div>
 
           {/* Mode toggle */}
-          <div className="flex items-center justify-center gap-4 mt-3">
-            <h3 className="bg-[#c0c0c0] text-black px-2 py-1 text-sm font-['MS_Sans_Serif'] [border:2px_inset_#808080]">
-              MODE SELECT:
-            </h3>
-            <div className="flex flex-col">
-              <Link
-                to={Route.to}
-                search={{
-                  ...state,
-                  isFlaggingMode: true,
-                }}
-                className={`flex items-center gap-3 px-2 py-1 ${
-                  state.isGameOver || state.isGameWon
-                    ? "opacity-50 cursor-not-allowed"
-                    : "cursor-pointer"
-                }`}
-                disabled={state.isGameOver || state.isGameWon}
-              >
-                <div
-                  className={`w-4 h-4 bg-white [border:2px_inset_#808080] flex items-center justify-center ${
-                    state.isFlaggingMode ? "bg-[#c0c0c0]" : ""
+          <noscript>
+            <div className="flex items-center justify-center gap-4 mt-3">
+              <h3 className="bg-[#c0c0c0] text-black px-2 py-1 text-sm font-['MS_Sans_Serif'] [border:2px_inset_#808080]">
+                MODE SELECT:
+              </h3>
+              <div className="flex flex-col">
+                <Link
+                  to={Route.to}
+                  search={{
+                    ...state,
+                    isFlaggingMode: true,
+                  }}
+                  className={`flex items-center gap-3 px-2 py-1 ${
+                    state.isGameOver || state.isGameWon
+                      ? "opacity-50 cursor-not-allowed"
+                      : "cursor-pointer"
                   }`}
+                  disabled={state.isGameOver || state.isGameWon}
                 >
-                  {state.isFlaggingMode && (
-                    <span className="text-black text-xs">✓</span>
-                  )}
-                </div>
-                <span className="text-sm font-['MS_Sans_Serif']">
-                  Flag Mode
-                </span>
-              </Link>
+                  <div
+                    className={`w-4 h-4 bg-white [border:2px_inset_#808080] flex items-center justify-center ${
+                      state.isFlaggingMode ? "bg-[#c0c0c0]" : ""
+                    }`}
+                  >
+                    {state.isFlaggingMode && (
+                      <span className="text-black text-xs">✓</span>
+                    )}
+                  </div>
+                  <span className="text-sm font-['MS_Sans_Serif']">
+                    Flag Mode
+                  </span>
+                </Link>
 
-              <Link
-                to={Route.to}
-                search={{
-                  ...state,
-                  isFlaggingMode: false,
-                }}
-                className={`flex items-center gap-2 px-2 py-1 ${
-                  state.isGameOver || state.isGameWon
-                    ? "opacity-50 cursor-not-allowed"
-                    : "cursor-pointer"
-                }`}
-                disabled={state.isGameOver || state.isGameWon}
-              >
-                <div
-                  className={`w-4 h-4 bg-white [border:2px_inset_#808080] flex items-center justify-center ${
-                    !state.isFlaggingMode ? "bg-[#c0c0c0]" : ""
+                <Link
+                  to={Route.to}
+                  search={{
+                    ...state,
+                    isFlaggingMode: false,
+                  }}
+                  className={`flex items-center gap-2 px-2 py-1 ${
+                    state.isGameOver || state.isGameWon
+                      ? "opacity-50 cursor-not-allowed"
+                      : "cursor-pointer"
                   }`}
+                  disabled={state.isGameOver || state.isGameWon}
                 >
-                  {!state.isFlaggingMode && (
-                    <span className="text-black text-xs">✓</span>
-                  )}
-                </div>
-                <span className="text-sm font-['MS_Sans_Serif']">
-                  Reveal Mode
-                </span>
-              </Link>
+                  <div
+                    className={`w-4 h-4 bg-white [border:2px_inset_#808080] flex items-center justify-center ${
+                      !state.isFlaggingMode ? "bg-[#c0c0c0]" : ""
+                    }`}
+                  >
+                    {!state.isFlaggingMode && (
+                      <span className="text-black text-xs">✓</span>
+                    )}
+                  </div>
+                  <span className="text-sm font-['MS_Sans_Serif']">
+                    Reveal Mode
+                  </span>
+                </Link>
+              </div>
             </div>
-          </div>
+          </noscript>
         </div>
       </div>
       <div className="flex flex-col items-center justify-center w-full">
