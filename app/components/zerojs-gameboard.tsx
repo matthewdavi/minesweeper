@@ -99,14 +99,22 @@ export function GameBoard() {
           </div>
         </div>
       </div>
-      <div className="flex flex-col items-center justify-center w-full">
-        {state.isGameOver && (
-          <div className="text-xl font-bold text-red-500">Game Over!</div>
-        )}
-        {state.isGameWon && (
-          <div className="text-xl font-bold text-green-500">You Win!</div>
-        )}
-      </div>
+
+      {/* Floating game status messages */}
+      {(state.isGameOver || state.isGameWon) && (
+        <div className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50 pointer-events-none">
+          {state.isGameOver && (
+            <div className="text-2xl font-bold text-red-500 bg-white/90 px-6 py-3 rounded shadow-lg">
+              Game Over!
+            </div>
+          )}
+          {state.isGameWon && (
+            <div className="text-2xl font-bold text-green-500 bg-white/90 px-6 py-3 rounded shadow-lg">
+              You Win!
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Game grid */}
       <div className={"w-full p-4 [border:2px_inset_#808080]"}>
