@@ -102,17 +102,19 @@ export function GameBoard() {
 
       {/* Floating game status messages */}
       {(state.isGameOver || state.isGameWon) && (
-        <div className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50 pointer-events-none">
-          {state.isGameOver && (
-            <div className="text-2xl font-bold text-red-500 bg-white/90 px-6 py-3 rounded shadow-lg">
-              Game Over!
-            </div>
-          )}
-          {state.isGameWon && (
-            <div className="text-2xl font-bold text-green-500 bg-white/90 px-6 py-3 rounded shadow-lg">
-              You Win!
-            </div>
-          )}
+        <div className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50">
+          <div className="bg-[#c0c0c0] p-4 [border:2px_outset_#c0c0c0] shadow-[2px_2px_0px_rgba(0,0,0,0.5)]">
+            {state.isGameOver && (
+              <div className="font-['MS_Sans_Serif'] text-xl text-[#ff0000] font-bold px-8 py-2 animate-[pulse_1s_ease-in-out_infinite]">
+                GAME OVER
+              </div>
+            )}
+            {state.isGameWon && (
+              <div className="font-['MS_Sans_Serif'] text-xl text-black px-8 py-2">
+                VICTORY!
+              </div>
+            )}
+          </div>
         </div>
       )}
 
